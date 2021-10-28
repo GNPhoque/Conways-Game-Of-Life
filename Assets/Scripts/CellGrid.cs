@@ -7,8 +7,10 @@ public class CellGrid : MonoBehaviour
 	[SerializeField]
 	GameObject cell;
 	[SerializeField]
+	[Min(0)]
 	int rows;
 	[SerializeField]
+	[Min(0)]
 	int columns;
 	[SerializeField]
 	float padding;
@@ -26,22 +28,19 @@ public class CellGrid : MonoBehaviour
 			{
 				grid[row, col] = Instantiate(cell, t);
 				grid[row, col].transform.position += new Vector3(row + row * padding, col + col * padding);
-			Debug.Log(new Vector3(row + row * padding, col + col * padding));
 			}
 		}
 		Vector3 cameraPos = grid[rows - 1, columns - 1].transform.position / 2;
-			Debug.Log(grid[rows - 1, columns - 1].transform.position);
-			Debug.Log(cameraPos);
 		Camera.main.transform.position = new Vector3(cameraPos.x, cameraPos.y, -10f);
 		if (cameraPos.x > cameraPos.y * 16f / 9f)
 		{
-			Debug.Log("in if");
 			Camera.main.orthographicSize = ((cameraPos.x) + 0.5f + (2 * padding)) / (16f / 9f);
 		}
 		else
 		{
-			Debug.Log("in else");
 			Camera.main.orthographicSize = cameraPos.y + 0.5f + 2 * padding;
 		}
 	}
+
+
 }
