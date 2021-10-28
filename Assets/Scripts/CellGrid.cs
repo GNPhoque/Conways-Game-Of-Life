@@ -42,5 +42,40 @@ public class CellGrid : MonoBehaviour
 		}
 	}
 
+	bool IsInGrid(int i, int j)
+	{
+		return i < rows && j < columns;
+	}
 
+	bool IsAlive(int i, int j)
+	{
+		return IsInGrid(i, j) && grid[i, j].GetComponent<Cell>().IsAlive;
+	}
+
+	int NumberAliveAroundCell(int row, int col)
+	{
+		int ret = 0;
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			{
+				if (IsAlive(i,j))
+				{
+					ret++;
+				}
+			}
+		}
+		return ret;
+	}
+
+	void SetAllCellsNeighbours()
+	{
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < columns; j++)
+			{
+				grid[i, j].GetComponent<Cell>().Neighbours = NumberAliveAroundCell(i, j);
+			}
+		}
+	}
 }

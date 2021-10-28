@@ -12,6 +12,9 @@ public class Cell : MonoBehaviour
 	bool isAlive;
 	Renderer rend;
 
+	public bool IsAlive { get => isAlive; set => isAlive = value; }
+	public int Neighbours { get; set; }
+
 	private void Awake()
 	{
 		rend = GetComponent<Renderer>();
