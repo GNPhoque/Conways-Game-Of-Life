@@ -236,8 +236,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cell: {fileID: 7800204796253015176, guid: 973f741be149e6845bb306ea9c24a752, type: 3}
-  rows: 16
-  columns: 9
+  rows: 10
+  columns: 20
   padding: 0.05
 --- !u!4 &835534667
 Transform:
