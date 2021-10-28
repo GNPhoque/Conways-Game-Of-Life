@@ -15,6 +15,8 @@ public class Cell : MonoBehaviour
 	private void Awake()
 	{
 		rend = GetComponent<Renderer>();
+		isAlive = Random.Range(0, 2) == 1;
+		rend.material = isAlive ? alive : dead;
 	}
 
 	private void OnMouseDown()
@@ -22,4 +24,6 @@ public class Cell : MonoBehaviour
 		isAlive = !isAlive;
 		rend.material = isAlive ? alive : dead;
 	}
+
+	public void SetIsAlive(bool living) => isAlive = living;
 }
