@@ -28,5 +28,7 @@ public class CellGrid : MonoBehaviour
 				grid[row, col].transform.position += new Vector3(row + row * padding, col + col * padding);
 			}
 		}
+		Vector3 cameraPos = grid[rows - 1, columns - 1].transform.position / 2;
+		Camera.main.transform.position = new Vector3(cameraPos.x, cameraPos.y, -10f); ;
 	}
 }
