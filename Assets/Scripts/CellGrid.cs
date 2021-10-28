@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,6 +29,7 @@ public class CellGrid : MonoBehaviour
 			{
 				grid[row, col] = Instantiate(cell, t);
 				grid[row, col].transform.position += new Vector3(row + row * padding, col + col * padding);
+				grid[row, col].name = $"({row}, {col})";
 			}
 		}
 		Vector3 cameraPos = grid[rows - 1, columns - 1].transform.position / 2;
@@ -42,30 +44,21 @@ public class CellGrid : MonoBehaviour
 		}
 	}
 
-	bool IsInGrid(int i, int j)
+	private void Update()
 	{
-		return i < rows && j < columns;
-	}
-
-	bool IsAlive(int i, int j)
-	{
-		return IsInGrid(i, j) && grid[i, j].GetComponent<Cell>().IsAlive;
-	}
-
-	int NumberAliveAroundCell(int row, int col)
-	{
-		int ret = 0;
-		for (int i = 0; i < row; i++)
+		if (Input.GetKeyDown( KeyCode.Space))
 		{
-			for (int j = 0; j < col; j++)
-			{
-				if (IsAlive(i,j))
-				{
-					ret++;
-				}
-			}
+			Debug.Log("Simulating");
+			RunSimulation();
 		}
-		return ret;
+	}
+
+	void RunSimulation()
+	{
+			Debug.Log("SET ALL CELLS NEIGHBOURS");
+		SetAllCellsNeighbours();
+			Debug.Log("APPLY SIMULATION");
+		ApplyAllCellsSimulation();
 	}
 
 	void SetAllCellsNeighbours()
@@ -75,6 +68,47 @@ public class CellGrid : MonoBehaviour
 			for (int j = 0; j < columns; j++)
 			{
 				grid[i, j].GetComponent<Cell>().Neighbours = NumberAliveAroundCell(i, j);
+			}
+		}
+	}
+
+	int NumberAliveAroundCell(int row, int col)
+	{
+		int ret = 0;
+		for (int i = -1; i <= 1; i++)
+		{
+			for (int j = -1; j <= 1; j++)
+			{
+				if (i == 0 && j == 0)
+				{
+					continue;
+				}
+				if (IsInGrid(row + i, col + j) && IsAlive(row + i, col + j))
+				{
+					ret++;
+				}
+			}
+		}
+		return ret;
+	}
+
+	bool IsAlive(int i, int j)
+	{
+			return IsInGrid(i, j) && grid[i, j].GetComponent<Cell>().IsAlive;
+	}
+
+	bool IsInGrid(int i, int j)
+	{
+		return i >= 0 && i < rows && j >= 0 && j < columns;
+	}
+
+	private void ApplyAllCellsSimulation()
+	{
+		for (int i = 0; i < rows; i++)
+		{
+			for (int j = 0; j < columns; j++)
+			{
+				grid[i, j].GetComponent<Cell>().ApplySimulation();
 			}
 		}
 	}

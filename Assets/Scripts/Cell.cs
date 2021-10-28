@@ -8,18 +8,35 @@ public class Cell : MonoBehaviour
 	Material alive;
 	[SerializeField]
 	Material dead;
-
-	bool isAlive;
+	[SerializeField]
 	Renderer rend;
 
-	public bool IsAlive { get => isAlive; set => isAlive = value; }
-	public int Neighbours { get; set; }
+	bool isAlive;
+	bool isAliveNext;
+	private int neighbours;
+
+	public bool IsAlive
+	{
+		get => isAlive; set
+		{
+			isAlive = value;
+			rend.material = isAlive ? alive : dead;
+		}
+	}
+	public int Neighbours
+	{
+		get => neighbours; set
+		{
+			neighbours = value;
+			SimulationStep();
+		}
+	}
 
 	private void Awake()
 	{
 		rend = GetComponent<Renderer>();
-		isAlive = Random.Range(0, 2) == 1;
-		rend.material = isAlive ? alive : dead;
+		//isAlive = Random.Range(0, 2) == 1;
+		//rend.material = isAlive ? alive : dead;
 	}
 
 	private void OnMouseDown()
@@ -28,5 +45,26 @@ public class Cell : MonoBehaviour
 		rend.material = isAlive ? alive : dead;
 	}
 
-	public void SetIsAlive(bool living) => isAlive = living;
+	void SimulationStep()
+	{
+		if (Neighbours == 3)
+		{
+			isAliveNext = true;
+		}
+		else if (Neighbours < 2 || Neighbours > 3)
+		{
+			isAliveNext = false;
+		}
+		else if( Neighbours == 2)
+		{
+			isAliveNext = isAlive;
+		}
+	}
+
+	public void ApplySimulation()
+	{
+		IsAlive = isAliveNext;
+	}
+
+
 }
