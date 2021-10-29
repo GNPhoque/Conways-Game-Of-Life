@@ -6,7 +6,7 @@ using UnityEngine;
 public class CellGrid : MonoBehaviour
 {
 	[SerializeField]
-	GameObject cell;
+	Cell cell;
 	[SerializeField]
 	[Min(0)]
 	int rows;
@@ -17,19 +17,19 @@ public class CellGrid : MonoBehaviour
 	float padding;
 
 	Transform t;
-	GameObject[,] grid;
+	Cell[,] grid;
 
 	private void Start()
 	{
 		t = GetComponent<Transform>();
-		grid = new GameObject[rows, columns];
+		grid = new Cell[rows, columns];
 		for (int row = 0; row < rows; row++)
 		{
 			for (int col = 0; col < columns; col++)
 			{
-				grid[row, col] = Instantiate(cell, t);
-				grid[row, col].transform.position += new Vector3(row + row * padding, col + col * padding);
-				grid[row, col].name = $"({row}, {col})";
+				grid[row, col] = Instantiate(cell, new Vector3(row + row * padding, col + col * padding), Quaternion.identity, t);
+				//grid[row, col].transform.position += new Vector3(row + row * padding, col + col * padding);
+				//grid[row, col].name = $"({row}, {col})";
 			}
 		}
 		Vector3 cameraPos = grid[rows - 1, columns - 1].transform.position / 2;
@@ -67,7 +67,7 @@ public class CellGrid : MonoBehaviour
 		{
 			for (int j = 0; j < columns; j++)
 			{
-				grid[i, j].GetComponent<Cell>().Neighbours = NumberAliveAroundCell(i, j);
+				grid[i, j].Neighbours = NumberAliveAroundCell(i, j);
 			}
 		}
 	}
@@ -94,7 +94,7 @@ public class CellGrid : MonoBehaviour
 
 	bool IsAlive(int i, int j)
 	{
-			return IsInGrid(i, j) && grid[i, j].GetComponent<Cell>().IsAlive;
+			return IsInGrid(i, j) && grid[i, j].IsAlive;
 	}
 
 	bool IsInGrid(int i, int j)
@@ -108,7 +108,7 @@ public class CellGrid : MonoBehaviour
 		{
 			for (int j = 0; j < columns; j++)
 			{
-				grid[i, j].GetComponent<Cell>().ApplySimulation();
+				grid[i, j].ApplySimulation();
 			}
 		}
 	}
