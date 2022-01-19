@@ -16,6 +16,7 @@ public class CellGrid : MonoBehaviour
 	[SerializeField]
 	float padding;
 
+	int frameCount;
 	Transform t;
 	Cell[,] grid;
 
@@ -46,18 +47,20 @@ public class CellGrid : MonoBehaviour
 
 	private void Update()
 	{
-		if (Input.GetKeyDown( KeyCode.Space))
+		if (Input.GetKey( KeyCode.Space))
 		{
-			Debug.Log("Simulating");
 			RunSimulation();
+			frameCount++;
+		}
+		if (Input.GetKey( KeyCode.A))
+		{
+			Debug.Log($"FRAME COUNT {frameCount}");
 		}
 	}
 
 	void RunSimulation()
 	{
-			Debug.Log("SET ALL CELLS NEIGHBOURS");
 		SetAllCellsNeighbours();
-			Debug.Log("APPLY SIMULATION");
 		ApplyAllCellsSimulation();
 	}
 
